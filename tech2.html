@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nature Sound Explorer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #30539c;
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 2.5em;
+    }
+    .sound-container {
+      margin-top: 30px;
+    }
+    .sound-btn {
+      background: #af4c82;
+      border: none;
+      padding: 15px 30px;
+      margin: 10px;
+      border-radius: 12px;
+      font-size: 1.2em;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .sound-btn:hover {
+      transform: scale(1.1);
+      background-color: #45a049;
+    }
+    .sound-btn.active {
+      background-color: #2e7d32;
+    }
+    .stop-btn {
+      background: #d9534f;
+      color: #fff;
+    }
+    .stop-btn:hover {
+      background-color: #c9302c;
+    }
+    .now-playing {
+      margin-top: 20px;
+      font-size: 1.5em;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nature Sound Explorer</h1>
+  <p>Click a sound to play it, or stop to silence everything.</p>
+  <div class="sound-container">
+    <button class="sound-btn" id="rainBtn" aria-label="Play Rain Sound">Rain</button>
+    <button class="sound-btn" id="oceanBtn" aria-label="Play Ocean Waves Sound">Ocean Waves</button>
+    <button class="sound-btn" id="whiteNoiseBtn" aria-label="Play White Noise">White Noise</button>
+    <button class="sound-btn stop-btn" id="stopBtn" aria-label="Stop All Sounds">Stop</button>
+  </div>
+  <p class="now-playing" id="nowPlaying">Select a sound to play</p>
+
+  <audio id="rainSound" preload="auto" loop>
+    <source src="https://www.soundjay.com/nature/rain-01.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="oceanSound" preload="auto" loop>
+    <source src="/ocean-waves-112906.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="whiteNoiseSound" preload="auto" loop>
+    <source src="/white-noise-171891.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    const buttons = document.querySelectorAll('.sound-btn:not(.stop-btn)');
+    const stopButton = document.getElementById('stopBtn');
+    const rainSound = document.getElementById('rainSound');
+    const oceanSound = document.getElementById('oceanSound');
+    const whiteNoiseSound = document.getElementById('whiteNoiseSound');
+    const nowPlaying = document.getElementById('nowPlaying');
+
+    // Function to stop all sounds
+    function stopAllSounds() {
+      rainSound.pause();
+      oceanSound.pause();
+      whiteNoiseSound.pause();
+      rainSound.currentTime = 0;
+      oceanSound.currentTime = 0;
+      whiteNoiseSound.currentTime = 0;
+      buttons.forEach(btn => btn.classList.remove('active'));
+      nowPlaying.textContent = "Select a sound to play";
+    }
+
+    // Add event listeners to sound buttons
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const soundId = button.id.replace('Btn', 'Sound');
+        const sound = document.getElementById(soundId);
+
+        // Stop all sounds first
+        stopAllSounds();
+
+        // Play the selected sound and activate the button
+        if (sound.paused) {
+          sound.play();
+          button.classList.add('active');
+          nowPlaying.textContent = `Now playing: ${button.textContent}`;
+        }
+      });
+    });
+
+    // Add event listener to Stop button
+    stopButton.addEventListener('click', stopAllSounds);
+  </script>
+</body>
+</html>
